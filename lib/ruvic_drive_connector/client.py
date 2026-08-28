@@ -244,6 +244,12 @@ class DriveClient:
                 )
                 .execute(num_retries=1)
             )
+        except (RefreshError, GoogleAuthError) as exc:
+            raise DriveAuthError(
+                f"No se pudo autenticar: el token OAuth/credenciales pueden "
+                f"estar revocados, vencidos o ser inválidos. Vuelve a "
+                f"autorizar el conector. Detalle: {exc}"
+            ) from exc
         except HttpError as exc:
             raise _wrap_http_error(exc) from exc
 
@@ -278,6 +284,12 @@ class DriveClient:
                 .get(fileId=file_id, fields=_FILE_FIELDS, supportsAllDrives=True)
                 .execute(num_retries=1)
             )
+        except (RefreshError, GoogleAuthError) as exc:
+            raise DriveAuthError(
+                f"No se pudo autenticar: el token OAuth/credenciales pueden "
+                f"estar revocados, vencidos o ser inválidos. Vuelve a "
+                f"autorizar el conector. Detalle: {exc}"
+            ) from exc
         except HttpError as exc:
             raise _wrap_http_error(exc) from exc
         return _format_file(f)
@@ -314,6 +326,12 @@ class DriveClient:
                 .get(fileId=file_id, fields="mimeType, name", supportsAllDrives=True)
                 .execute(num_retries=1)
             )
+        except (RefreshError, GoogleAuthError) as exc:
+            raise DriveAuthError(
+                f"No se pudo autenticar: el token OAuth/credenciales pueden "
+                f"estar revocados, vencidos o ser inválidos. Vuelve a "
+                f"autorizar el conector. Detalle: {exc}"
+            ) from exc
         except HttpError as exc:
             raise _wrap_http_error(exc) from exc
 
@@ -397,6 +415,12 @@ class DriveClient:
                 )
                 .execute(num_retries=1)
             )
+        except (RefreshError, GoogleAuthError) as exc:
+            raise DriveAuthError(
+                f"No se pudo autenticar: el token OAuth/credenciales pueden "
+                f"estar revocados, vencidos o ser inválidos. Vuelve a "
+                f"autorizar el conector. Detalle: {exc}"
+            ) from exc
         except HttpError as exc:
             raise _wrap_http_error(exc) from exc
         self._logger.info(
