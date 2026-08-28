@@ -98,6 +98,22 @@ def _wrap_http_error(exc: HttpError) -> DriveConnectorError:
     return DriveDataError(f"Error de Drive API (HTTP {status}): {exc}")
 
 
+def _validate_max_results(max_results: Any, max_limit: int) -> int:
+    if isinstance(max_results, bool) or not isinstance(max_results, int):
+        raise DriveDataError(
+            f"max_results debe ser un entero, no {type(max_results).__name__}."
+        )
+    if not 1 <= max_results <= max_limit:
+        raise DriveDataError(f"max_results debe estar entre 1 y {max_limit}.")
+    return max_results
+
+
+def _validate_file_id(file_id: Any) -> str:
+    if not isinstance(file_id, str) or not file_id.strip():
+        raise DriveDataError(f"file_id debe ser un string no vacío, no {file_id!r}.")
+    return file_id
+
+
 class DriveClient:
     """Cliente de Google Drive para un usuario específico de un dominio
     Google Workspace, vía cuenta de servicio con delegación de dominio.
@@ -214,8 +230,8 @@ class DriveClient:
             >>> client.list_files(query="name contains 'reporte'", max_results=5)
             [{'id': '1a2b3c', 'name': 'reporte.pdf', ...}]
         """
+        max_results = _validate_max_results(max_results, 100)
         service = self._get_service()
-        max_results = max(1, min(int(max_results), 100))
         try:
             resp = (
                 service.files()
@@ -254,6 +270,7 @@ class DriveClient:
             >>> client.get_file("1a2b3c")
             {'id': '1a2b3c', 'name': 'reporte.pdf', 'mime_type': 'application/pdf', ...}
         """
+        file_id = _validate_file_id(file_id)
         service = self._get_service()
         try:
             f = (
@@ -278,7 +295,9 @@ class DriveClient:
 
         Args:
             file_id: ID del archivo a descargar.
-            destination_path: ruta local donde guardar el archivo.
+            destination_path: ruta local donde guardar el archivo. Si ya
+                existe un archivo en esa ruta, se sobrescribe sin
+                confirmación.
 
         Returns:
             La ruta local donde quedó guardado el archivo.
@@ -287,6 +306,7 @@ class DriveClient:
             >>> client.download_file("1a2b3c", "/tmp/reporte.pdf")
             '/tmp/reporte.pdf'
         """
+        file_id = _validate_file_id(file_id)
         service = self._get_service()
         try:
             meta = (
