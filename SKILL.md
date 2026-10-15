@@ -6,8 +6,8 @@ description: >
   Workspace, vía cuenta de servicio con delegación de dominio
   (impersonación) - buscar/listar archivos con filtros (list_files),
   leer los metadatos de un archivo (get_file), descargar el contenido de
-  un archivo (download_file) y subir un archivo local a Drive
-  (upload_file). Úsala cuando el usuario pida buscar, listar, leer,
+  un archivo (download_file) subir un archivo local a Drive
+  (upload_file) y crear carpetas (create_folder). Úsala cuando el usuario pida buscar, listar, leer,
   descargar o subir archivos en el Drive corporativo de Google Workspace,
   especialmente si menciona varios usuarios/buzones del mismo dominio
   sin volver a autorizar cada uno por separado.
@@ -94,6 +94,16 @@ result = client.upload_file(
     name="Reporte mensual.pdf",
     parent_folder_id="1xYzCarpetaDestino",  # opcional
 )
+```
+
+## Capacidad 5 — Crear una carpeta
+
+```python
+carpeta = client.create_folder(
+    "Reportes 2026",
+    parent_folder_id="1xYzCarpetaPadre",  # opcional (default: raíz de Mi unidad)
+)
+client.upload_file("/tmp/reporte.pdf", parent_folder_id=carpeta["id"])
 ```
 
 ## Manejo de errores

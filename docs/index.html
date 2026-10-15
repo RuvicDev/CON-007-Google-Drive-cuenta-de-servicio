@@ -62,6 +62,10 @@
             <td><code>file.upload</code></td>
             <td data-i18n="op.upload">Sube un archivo local al Drive del usuario (máx. 20 MB)</td>
           </tr>
+          <tr>
+            <td><code>folder.create</code></td>
+            <td data-i18n="op.folder">Crea una carpeta (opcionalmente dentro de otra)</td>
+          </tr>
         </tbody>
       </table>
 
@@ -149,7 +153,7 @@
     <section>
       <h2 id="permisos" data-i18n="section.permisos">Permisos requeridos</h2>
 
-      <p data-i18n="permisos.intro">La cuenta de servicio necesita el scope completo de Drive para poder listar, leer, descargar y subir archivos.</p>
+      <p data-i18n="permisos.intro">La cuenta de servicio necesita el scope completo de Drive para poder listar, leer, descargar y subir archivos, y crear carpetas.</p>
 
       <table>
         <thead>
@@ -161,7 +165,7 @@
         <tbody>
           <tr>
             <td><code>drive</code></td>
-            <td data-i18n="scope.drive">Buscar y listar archivos (<code>file.list</code>), leer metadatos (<code>file.read</code>), descargar (<code>file.download</code>) y subir archivos (<code>file.upload</code>)</td>
+            <td data-i18n="scope.drive">Buscar y listar archivos (<code>file.list</code>), leer metadatos (<code>file.read</code>), descargar (<code>file.download</code>), subir archivos (<code>file.upload</code>) y crear carpetas (<code>folder.create</code>)</td>
           </tr>
         </tbody>
       </table>
@@ -277,7 +281,7 @@
       <p data-i18n="faq2.a">Sí. Una cuenta de servicio puede tener varios scopes autorizados a la vez en la misma entrada de delegación del Admin Console. Solo agrega <code>https://www.googleapis.com/auth/drive</code> a la lista de scopes existente, separado por coma, sin espacios extra.</p>
 
       <h3 data-i18n="faq3.q">¿El agente puede eliminar o sobrescribir archivos?</h3>
-      <p data-i18n="faq3.a">El conector solo expone las operaciones <code>file.list</code>, <code>file.read</code>, <code>file.download</code> y <code>file.upload</code> — no expone eliminación ni sobrescritura. El scope subyacente sí lo permitiría técnicamente, pero el código generado no incluye esas operaciones a menos que se pidan explícitamente y se extienda el conector.</p>
+      <p data-i18n="faq3.a">El conector solo expone las operaciones <code>file.list</code>, <code>file.read</code>, <code>file.download</code>, <code>file.upload</code> y <code>folder.create</code> — no expone eliminación ni sobrescritura. El scope subyacente sí lo permitiría técnicamente, pero el código generado no incluye esas operaciones a menos que se pidan explícitamente y se extienda el conector.</p>
 
       <h3 data-i18n="faq4.q">Rotación de credenciales</h3>
       <p data-i18n="faq4.a">Recomendado cada 90 días o según tu política: genera una nueva clave JSON en Google Cloud Console (la cuenta de servicio puede tener varias claves activas a la vez), actualízala en el formulario del conector, prueba la conexión, y luego elimina la clave anterior. La delegación de dominio no cambia — sigue asociada al mismo Client ID.</p>
@@ -322,6 +326,7 @@
     "op.read": "Lee los metadatos de un archivo (nombre, tipo, dueño, tamaño, etc.)",
     "op.download": "Descarga el contenido de un archivo a disco local",
     "op.upload": "Sube un archivo local al Drive del usuario (máx. 20 MB)",
+    "op.folder": "Crea una carpeta (opcionalmente dentro de otra)",
     "callout.solo_ws.title": "Solo para Google Workspace",
     "callout.solo_ws.body": "Este conector usa <strong>delegación de dominio</strong>, una función exclusiva de Google Workspace. No funciona con cuentas de Google personales (@gmail.com).",
     "section.prerrequisitos": "Prerrequisitos",
@@ -353,10 +358,10 @@
     "step7.title": "Define qué usuario usarás para la prueba inicial.",
     "step7.body": "Anota el correo de un usuario del dominio (ej. <code>facturacion@tuempresa.com</code>) para el formulario de Ruvic. Después de configurado, el agente podrá usar <strong>cualquier otro usuario autorizado</strong> del mismo dominio, no solo este.",
     "section.permisos": "Permisos requeridos",
-    "permisos.intro": "La cuenta de servicio necesita el scope completo de Drive para poder listar, leer, descargar y subir archivos.",
+    "permisos.intro": "La cuenta de servicio necesita el scope completo de Drive para poder listar, leer, descargar y subir archivos, y crear carpetas.",
     "table.scope": "Scope",
     "table.scope_uso": "Para qué lo usa el conector",
-    "scope.drive": "Buscar y listar archivos (<code>file.list</code>), leer metadatos (<code>file.read</code>), descargar (<code>file.download</code>) y subir archivos (<code>file.upload</code>)",
+    "scope.drive": "Buscar y listar archivos (<code>file.list</code>), leer metadatos (<code>file.read</code>), descargar (<code>file.download</code>), subir archivos (<code>file.upload</code>) y crear carpetas (<code>folder.create</code>)",
     "callout.acceso.title": "Este scope da acceso completo de lectura y escritura",
     "callout.acceso.body": "A diferencia de scopes más restringidos como <code>drive.file</code> (solo archivos creados por la app) o <code>drive.readonly</code> (solo lectura), <code>drive</code> permite ver, descargar, modificar y subir <strong>cualquier</strong> archivo al que el usuario impersonado tenga acceso, incluidas unidades compartidas. La delegación aplica a todo el dominio: la cuenta de servicio puede impersonar a cualquier usuario autorizado, incluidos los que se creen en el futuro.",
     "section.configuracion_ruvic": "Configuración en Ruvic",
@@ -399,7 +404,7 @@
     "faq2.q": "¿Puedo usar la misma cuenta de servicio que Gmail Workspace?",
     "faq2.a": "Sí. Una cuenta de servicio puede tener varios scopes autorizados a la vez en la misma entrada de delegación del Admin Console. Solo agrega <code>https://www.googleapis.com/auth/drive</code> a la lista de scopes existente, separado por coma, sin espacios extra.",
     "faq3.q": "¿El agente puede eliminar o sobrescribir archivos?",
-    "faq3.a": "El conector solo expone las operaciones <code>file.list</code>, <code>file.read</code>, <code>file.download</code> y <code>file.upload</code> — no expone eliminación ni sobrescritura. El scope subyacente sí lo permitiría técnicamente, pero el código generado no incluye esas operaciones a menos que se pidan explícitamente y se extienda el conector.",
+    "faq3.a": "El conector solo expone las operaciones <code>file.list</code>, <code>file.read</code>, <code>file.download</code>, <code>file.upload</code> y <code>folder.create</code> — no expone eliminación ni sobrescritura. El scope subyacente sí lo permitiría técnicamente, pero el código generado no incluye esas operaciones a menos que se pidan explícitamente y se extienda el conector.",
     "faq4.q": "Rotación de credenciales",
     "faq4.a": "Recomendado cada 90 días o según tu política: genera una nueva clave JSON en Google Cloud Console (la cuenta de servicio puede tener varias claves activas a la vez), actualízala en el formulario del conector, prueba la conexión, y luego elimina la clave anterior. La delegación de dominio no cambia — sigue asociada al mismo Client ID.",
     "faq5.q": "¿Qué hago si el JSON se compromete?",
@@ -431,6 +436,7 @@
     "op.read": "Reads a file's metadata (name, type, owner, size, etc.)",
     "op.download": "Downloads a file's content to local disk",
     "op.upload": "Uploads a local file to the user's Drive (max 20 MB)",
+    "op.folder": "Creates a folder (optionally inside another one)",
     "callout.solo_ws.title": "Google Workspace only",
     "callout.solo_ws.body": "This connector uses <strong>domain-wide delegation</strong>, a Google Workspace-only feature. It does not work with personal Google accounts (@gmail.com).",
     "section.prerrequisitos": "Prerequisites",
@@ -462,10 +468,10 @@
     "step7.title": "Decide which user you'll use for the initial test.",
     "step7.body": "Note the email of a domain user (e.g. <code>billing@yourcompany.com</code>) for the Ruvic form. Once configured, the agent can use <strong>any other authorized user</strong> in the same domain, not just this one.",
     "section.permisos": "Required permissions",
-    "permisos.intro": "The service account needs the full Drive scope in order to list, read, download and upload files.",
+    "permisos.intro": "The service account needs the full Drive scope in order to list, read, download and upload files, and create folders.",
     "table.scope": "Scope",
     "table.scope_uso": "Why the connector needs it",
-    "scope.drive": "Search and list files (<code>file.list</code>), read metadata (<code>file.read</code>), download (<code>file.download</code>) and upload files (<code>file.upload</code>)",
+    "scope.drive": "Search and list files (<code>file.list</code>), read metadata (<code>file.read</code>), download (<code>file.download</code>), upload files (<code>file.upload</code>) and create folders (<code>folder.create</code>)",
     "callout.acceso.title": "This scope grants full read and write access",
     "callout.acceso.body": "Unlike more restricted scopes such as <code>drive.file</code> (only files created by the app) or <code>drive.readonly</code> (read only), <code>drive</code> allows viewing, downloading, modifying and uploading <strong>any</strong> file the impersonated user has access to, including shared drives. Delegation applies to the whole domain: the service account can impersonate any authorized user, including ones created in the future.",
     "section.configuracion_ruvic": "Configuration in Ruvic",
@@ -508,7 +514,7 @@
     "faq2.q": "Can I use the same service account as Gmail Workspace?",
     "faq2.a": "Yes. A service account can have several scopes authorized at once in the same delegation entry of the Admin Console. Just add <code>https://www.googleapis.com/auth/drive</code> to the existing scope list, comma-separated, with no extra spaces.",
     "faq3.q": "Can the agent delete or overwrite files?",
-    "faq3.a": "The connector only exposes the <code>file.list</code>, <code>file.read</code>, <code>file.download</code> and <code>file.upload</code> operations — it does not expose deletion or overwriting. The underlying scope would technically allow it, but the generated code doesn't include those operations unless explicitly requested and the connector is extended.",
+    "faq3.a": "The connector only exposes the <code>file.list</code>, <code>file.read</code>, <code>file.download</code>, <code>file.upload</code> and <code>folder.create</code> operations — it does not expose deletion or overwriting. The underlying scope would technically allow it, but the generated code doesn't include those operations unless explicitly requested and the connector is extended.",
     "faq4.q": "Credential rotation",
     "faq4.a": "Recommended every 90 days or per your policy: generate a new JSON key in Google Cloud Console (a service account can have several active keys at once), update it in the connector form, test the connection, then delete the old key. Domain-wide delegation doesn't change — it stays tied to the same Client ID.",
     "faq5.q": "What if the JSON is compromised?",
